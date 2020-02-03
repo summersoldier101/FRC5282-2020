@@ -15,7 +15,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 
 public class OI {
-    public Joystick righJoystick;
+    public Joystick rightJoystick;
     public Joystick leftJoystick;
    
     public XboxController xbox;
@@ -31,7 +31,7 @@ public class OI {
 
 
     public OI() {
-        righJoystick = new Joystick(2);
+        rightJoystick = new Joystick(2);
         leftJoystick = new Joystick(3);
        
         xbox = new XboxController(0);     
