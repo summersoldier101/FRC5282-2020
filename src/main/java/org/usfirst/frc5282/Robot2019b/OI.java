@@ -24,7 +24,7 @@ public class OI {
     public JoystickButton buttonX3;
     public JoystickButton buttonX4;
     public JoystickButton buttonX5;
-   
+    public JoystickButton buttonX6;
 
    public XboxController xbox2;  
    public JoystickButton buttonXP1;
@@ -41,6 +41,7 @@ public class OI {
         buttonX3 = new JoystickButton(xbox, 3);   
         buttonX4 = new JoystickButton(xbox, 4);   
         buttonX5 = new JoystickButton(xbox, 5);   
+        buttonX6 = new JoystickButton(xbox, 6);
 
         xbox2 = new XboxController(1);
         buttonXP1 = new JoystickButton(xbox2, 1);
@@ -69,8 +70,8 @@ public class OI {
         //buttonX2.whenPressed(new MT());  
         //buttonX3.whenPressed(new MT());  
         //buttonX4.whenPressed(new MT());  
-       buttonX5.whileHeld(new TargetAdjust());
-
+       buttonX6.whileHeld(new TargetAdjust());
+       
        
        //2nd xbox controller buttons
         buttonXP1.whenPressed(new FireBall());

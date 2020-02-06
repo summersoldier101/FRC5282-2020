@@ -2,12 +2,18 @@
 package org.usfirst.frc5282.Robot2019b.subsystems;
 
 import org.usfirst.frc5282.Robot2019b.Constants;
+import org.usfirst.frc5282.Robot2019b.LimeLight;
 import org.usfirst.frc5282.Robot2019b.Robot;
 import org.usfirst.frc5282.Robot2019b.commands.*;
 
-import edu.wpi.first.wpilibj.GenericHID.Hand;  
+import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
+ 
+import edu.wpi.first.networktables.NetworkTable;            //!! Limelight
+import edu.wpi.first.networktables.NetworkTableEntry;       //!! Limelight
+import edu.wpi.first.networktables.NetworkTableInstance;    //!! Limelight
 import edu.wpi.first.wpilibj.DriverStation;
 
 import java.sql.Driver;
@@ -34,20 +40,34 @@ public class DriveTrain extends Subsystem {
     static final double kToleranceDegrees = 2.0f;   //NavX
     //private AnalogGyro analogGyro1; 
     //public AnalogGyro Gyro1;
-
+LimeLight lime;
     private TalonSRX DriveLF;   //Speed controlers 
     private TalonSRX DriveLB;  
     private TalonSRX DriveRF;
     private TalonSRX DriveRB;
 
-
+    NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
+    NetworkTableEntry tx = table.getEntry("tx");
+    NetworkTableEntry ty = table.getEntry("ty");
+    NetworkTableEntry ta = table.getEntry("ta");
+    NetworkTableEntry tv = table.getEntry("tv");
 
     //=======================================================================================================
     // Genernal Constants
     private static final int kdTimeoutMs = 30;                      //set to zero to skip error checking
-    private static final double kdDeadBand = 0.02;                      //dead band for motor power
+    private static final double kdDeadBand = .25;                      //dead band for motor power COSTING!!!!!!
   
-
+  private double AimingMultiplier=0.3;        // Power of steering assist multiplier.  Higher the more assist.
+    private double AimingMinAngle=3.0;          // Do not adjust below this angle in degrees.  Increase this to stop oscilation.  Decrease to improve accuracy.
+    private double DriftMinAngle=0;
+    //Just Amining Assist
+    private double AimThresholdPower=.2;       // Below this joystick input just aim. 2  If you are virtually stopped, just aim at the target.
+    private double AimingPower=0.5;             // Just aim with this power   5           Power to just aim if you are virtually stoppped.
+    
+    //Variables for inputs
+    private double jLeft = 0.0;              //Joystick left input
+    private double jRight = 0.0;             // Joystick right input
+    private double jAverage = 0.0;           
 
     //=======================================================================================================
 
@@ -55,6 +75,9 @@ public class DriveTrain extends Subsystem {
 
     public DriveTrain() {
        
+     
+    
+
         //Gyro1 = new AnalogGyro(1);
         //Gyro1.setSensitivity(0.007);
         //Gyro1.reset();
@@ -182,8 +205,20 @@ public class DriveTrain extends Subsystem {
         double Jx=Robot.oi.xbox.getX(Hand.kLeft)*1;
         double Jz=Robot.oi.xbox.getX(Hand.kRight)*1;
 
+       
 
+        MechPower(Jx,Jy,Jz);
+
+      
+
+       
         
+                                
+    
+    }
+
+
+    public void MechPower(double Jx, double Jy, double Jz) { 
         double r = Math.hypot(Jx, Jy);
         double robotAngle = Math.atan2(Jy, Jx) - Math.PI / 4;
         double rightX = Jz;
@@ -200,39 +235,18 @@ public class DriveTrain extends Subsystem {
         SmartDashboard.putNumber("LR", LR);
         SmartDashboard.putNumber("RR", RR);
 
-        //leftFront.setPower(v1); old old from origianl math code example
-        //rightFront.setPower(v2);
-        //leftRear.setPower(v3)
-        //rightRear.setPower(v4);
-        
-        
-       
-       // DriveRF.set(RF);         
-        //DriveLR.set(LR);
-        //DriveRR.set(RR);
 
         DriveLF.set(ControlMode.PercentOutput, LF, DemandType.ArbitraryFeedForward, 0);  // this was oringaly used for arcade drive     
         DriveLB.set(ControlMode.PercentOutput, LR, DemandType.ArbitraryFeedForward, 0);  // this was oringaly used for arcade drive
        DriveRF.set(ControlMode.PercentOutput, RF, DemandType.ArbitraryFeedForward, 0);  // this was oringaly used for arcade drive
-       DriveRB.set(ControlMode.PercentOutput, RR, DemandType.ArbitraryFeedForward, 0);  // this was oringaly used for arcade drive
-
-
-
-        //double leftYstick = 0.0;
-        //double rightYstick = 0.0;
-
-        //leftYstick = -1.0 * Robot.oi.leftStick.getY();
-        //rightYstick = -1.0 * Robot.oi.rightStick.getY();
-            
-        //if(leftYstick==0.0 && rightYstick==0.0){                                // if no input from regular driver
-        //    rightYstick = -1.0 * Robot.oi.xboxS.getY(Hand.kRight);       // check for 2nd xbox
-        //    leftYstick = -1.0 * Robot.oi.xboxS.getY(Hand.kLeft);
-        //}
-
-
-        //ApplyMotorPower(leftYstick, rightYstick);                                   // apply power    
+       DriveRB.set(ControlMode.PercentOutput, RR, DemandType.ArbitraryFeedForward, 0);  // this was oringaly used for arcade                      
     
     }
+
+
+
+
+
     /*
     public void Move(double LB){
         DriveLB.set(ControlMode.PercentOutput, LB, DemandType.ArbitraryFeedForward, 0);  // this was oringaly used for arcade drive
@@ -240,10 +254,166 @@ public class DriveTrain extends Subsystem {
     }
  */
  
- 
-    public void SensorInfo() {
-        //System.out.println("Drive Train: Left "+DriveLF.getSelectedSensorPosition(0)+" Right"+DriveRF.getSelectedSensorPosition(0));   // zero is pidIdx
+public void TargetAdjust(){
+
+    NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
+    NetworkTableEntry tx = table.getEntry("tx");
+    NetworkTableEntry ty = table.getEntry("ty");
+    NetworkTableEntry ta = table.getEntry("ta");
+    NetworkTableEntry tl = table.getEntry("tv");
+
+    double Tx = tx.getDouble(-1);
+    double Ty = ty.getDouble(-1);
+    double Tl = tl.getDouble(-1);
+    double Tarea = ta.getDouble(0.0);
+    System.out.println("Limelight Data Tx "+Tx+" Ty "+Ty);
+    /*
+    Jy = -Robot.oi.xbox.getY();     // Get joystick input jleft
+    Jx = -Robot.oi.xbox2.getX();     // jright  
+    */                 
+    double Jy=-1*Robot.oi.xbox.getY(Hand.kLeft)*1;
+    double Jx=Robot.oi.xbox.getX(Hand.kLeft)*1;
+    double Jz=Robot.oi.xbox.getX(Hand.kRight)*1;
+    
+    System.out.println("Target Aim Data:  x"+Tx+" y"+Ty+" l"+Tl+" a"+Tarea);
+    System.out.println(" Jy"+Jy+" Jx"+Jx+"jAverage"+jAverage);
+
+    
+    if (Tl==1){                                  // Is there a target?        
+        
+                                   // Driver Forwards and Aim
+            if(Tx > 10){
+                     Jz = Jz+.3;
+            }
+            else if (Tx> 6) {
+                Jz= Jz + (Tx-2)/(10-2)*.3;
+
+            }
+                 else if (Tx> 2){
+                     Jz=Jz + (Tx-2)/(10-2)*.3;
+                 }
+                 else if (Tx> 0){
+                    //do nothing
+
+                 
+                 }        
+            else if (Tx < -10){
+                Jz= Jz-.3;  
+            }
+            else if (Tx<- 6) {
+                Jz= Jz + (-Tx-2)/(10-2)*.3;
+
+            }
+                else if (Tx< -2){
+                    Jz=Jz - (-Tx-2)/(10-2)*.3;
+                }
+                else if (Tx< 0){
+                    
+                }
+            }
+            
+          Robot.driveTrain.MechPower(Jx, Jy, Jz);
+        }
+
+
+
+/*
+if(Tl==1){
+    if(Ty > 10){
+        Jx=Jx +.5;
+
     }
+    else if (Tx > 6){
+        Jx= Jx + (Ty-2)/(10-2)*.3;
+    }
+    else if (Tx > 2){
+        Jx=Jx + (Ty-2)/(10-2)*.3;
+
+    }
+    else if (Tx>0){
+        //do nothing
+    }
+    Robot.driveTrain.MechPower(Jx, Jy, Jz);
+
+}
+
+*/
+        /* move at target
+        if(Tl==1){
+            if(Ty > -25){
+                Jy=Jy +.5;
+
+            }
+            else if (Ty > -13.5){
+                Jy= Jy + (Ty-2)/(10-2)*.3;
+            }
+            else if (Ty > -5){
+                Jy=Jy + (Ty-2)/(10-2)*.3;
+
+            }
+            else if (Ty>0){
+                //do nothing
+            }
+            Robot.driveTrain.MechPower(Jx, Jy, Jz);
+
+        }
+
+*/
+
+
+
+
+
+
+        
+    
+
+    
+
+/* old tank drive aiming code
+if (jAverage>=AimThresholdPower){                               // Driver Forwards and Aim
+    if(Tx > AimingMinAngle){
+        Robot.driveTrain.ApplyMotorPower(Jy*(.5+AimingMultiplier), Jx*(1-AimingMultiplier));            // Adjust Right    used to be 1
+    }
+    else if (Tx < -AimingMinAngle){
+        Robot.driveTrain.ApplyMotorPower(Jy*(.5-AimingMultiplier), Jx*(1+AimingMultiplier));            // Adjust Left
+    }
+    else {
+        Robot.driveTrain.ApplyMotorPower(Jy, Jx);            // Below angle adjustment. Adjust none. 
+    }
+}
+else if (jAverage<=-AimThresholdPower){                         // Drive backwards and Aim
+    if(Tx > AimingMinAngle){
+        Robot.driveTrain.ApplyMotorPower(Jy*(.5-AimingMultiplier), Jx*(1+AimingMultiplier));            // Adjust Right
+    }
+    else if (Tx < AimingMinAngle){
+        Robot.driveTrain.ApplyMotorPower(Jy*(.5+AimingMultiplier), Jx*(1-AimingMultiplier));            // Adjust Left   
+    }
+    else {
+        Robot.driveTrain.ApplyMotorPower(Jy, Jx);            // Below minimum needed angle adjustment. Don't adjust
+    }
+} else {                                                             // Just aim, NO driving
+    if(Tx > AimingMinAngle){
+         if(Tx> AimingMinAngle+5){AimingPower= .3;}          // Reduce power .3
+
+        Robot.driveTrain.ApplyMotorPower(AimingPower, -AimingPower);  
+                   }
+    else if (Tx < -AimingMinAngle){
+        if(Tx< -AimingMinAngle+5){AimingPower= .3;}        // Reduce power .3
+        Robot.driveTrain.ApplyMotorPower(-AimingPower, AimingPower);    
+        
+    }
+    else {Robot.driveTrain.ApplyMotorPower(Jy,Jx);}            // Not Driving, Just Aim
+}
+}
+*/
+
+
+
+
+public void SensorInfo() {
+        //System.out.println("Drive Train: Left "+DriveLF.getSelectedSensorPosition(0)+" Right"+DriveRF.getSelectedSensorPosition(0));   // zero is pidIdx
+    }/*
 public void MotorPower(double L, double R) {                    // Tankdrive
         
         
@@ -251,7 +421,7 @@ public void MotorPower(double L, double R) {                    // Tankdrive
         DriveRB.set(ControlMode.PercentOutput, R);
       
     }
-    
+    */
     
     
     /* Zero drive train encoders */
@@ -264,35 +434,18 @@ public void MotorPower(double L, double R) {                    // Tankdrive
     }
     
 
-    public void resetGyro() {
-        //System.out.println("Gyro Reset Method Called");
-        //Gyro1.reset();
-    }
+ 
 
-/*
-    public double getGyroAngle() {
-        //double angle = Gyro1.getAngle();
-        return ahrs.getAngle();
-    }
-*/
-    
+
 
 
     // this method is currently not used.
     public void ApplyMotorPower(double L, double R) {                    // Tankdrive Percent output
-        // This modifies power applied to the motors directly.
-
-        // Speed reduction
-        // Original design:  Both triggers is reduction2, one trigger is reduction 1.
-        // This allows either trigger to be used for reduction 1 and both results in reduction 2.
-     
-
-
-        //Apply the power to the drive.
+        
         
         DriveLB.set(ControlMode.PercentOutput, L, DemandType.ArbitraryFeedForward, 0);  // this was oringaly used for arcade drive
-        DriveRF.set(ControlMode.PercentOutput, L, DemandType.ArbitraryFeedForward, 0);  // With the zero at the end I don't think it does anything different   
-       DriveLB.set(ControlMode.PercentOutput, L, DemandType.ArbitraryFeedForward, 0);  // this was oringaly used for arcade drive
+        DriveRF.set(ControlMode.PercentOutput, R, DemandType.ArbitraryFeedForward, 0);  // With the zero at the end I don't think it does anything different   
+        DriveLB.set(ControlMode.PercentOutput, L, DemandType.ArbitraryFeedForward, 0);  // this was oringaly used for arcade drive
         DriveRB.set(ControlMode.PercentOutput, R, DemandType.ArbitraryFeedForward, 0);  // With the zero at the end I don't think i
         
     }
@@ -302,4 +455,92 @@ public void MotorPower(double L, double R) {                    // Tankdrive
 
     }
 
-}
+
+
+
+/*
+    public void TargetAdjust(){
+        
+    //private double m_PipeLine;
+
+     // ******************************************************
+    // This code is currently designed so that the user can overpower the assist.
+    // Pressing the button guides the user, but if they apply full power in one direction it will still go that way.
+    // This can help when aquiring the wrong target.
+    // The amount of over powering automated control is dictated by the AimingMultiplier 
+    // Note that the motors max out at 1.o so above the Multipler amount 
+    // (if multiplier of 0.3, then above 0.7 power on joystick) has reduced effect, since the motors can not be set to 1.3 and 0.7.  They get 1.0 and 0.7;
+    // aka. Slow down a little to
+
+        NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
+        NetworkTableEntry tx = table.getEntry("tx");
+        NetworkTableEntry ty = table.getEntry("ty");
+        NetworkTableEntry ta = table.getEntry("ta");
+        NetworkTableEntry tl = table.getEntry("tv");
+
+        double Tx = tx.getDouble(-1);
+        double Ty = ty.getDouble(-1);
+        double Tl = tl.getDouble(-1);
+        double Tarea = ta.getDouble(0.0);
+        System.out.println("Limelight Data Tx "+Tx+" Ty "+Ty);
+
+        jLeft = -Robot.oi.xbox.getY();     // Get joystick input
+        jRight = -Robot.oi.xbox2.getX();                        
+        jAverage = (jLeft+jRight)/2;      
+
+        System.out.println("Target Aim Data:  x"+Tx+" y"+Ty+" l"+Tl+" a"+Tarea);
+        System.out.println("                 jleft"+jLeft+" jRight"+jRight+"jAverage"+jAverage);
+       
+        
+        //Data ouput
+        //System.out.println("____________________________________________________________");
+        //System.out.println("TargetAimHeld command");
+        //System.out.println("Aim Data: cv"+cv+" cx"+cx+" cy"+cy+" ca"+ca+" cs"+cs);
+        //System.out.println("PipeLine: "+lime.getPipeline());
+        
+        //System.out.println("    Gyro:"+Robot.driveTrain.getGyroAngle());
+        
+              
+        
+        if (Tl==1){                                  // Is there a target?        
+            
+            if (jAverage>=AimThresholdPower){                               // Driver Forwards and Aim
+                if(Tx > AimingMinAngle){
+                    Robot.driveTrain.ApplyMotorPower(jLeft*(.5+AimingMultiplier), jRight*(1-AimingMultiplier));            // Adjust Right    used to be 1
+                }
+                else if (Tx < -AimingMinAngle){
+                    Robot.driveTrain.ApplyMotorPower(jLeft*(.5-AimingMultiplier), jRight*(1+AimingMultiplier));            // Adjust Left
+                }
+                else {
+                    Robot.driveTrain.ApplyMotorPower(jLeft, jRight);            // Below angle adjustment. Adjust none. 
+                }
+            }
+            else if (jAverage<=-AimThresholdPower){                         // Drive backwards and Aim
+                if(Tx > AimingMinAngle){
+                    Robot.driveTrain.ApplyMotorPower(jLeft*(.5-AimingMultiplier), jRight*(1+AimingMultiplier));            // Adjust Right
+                }
+                else if (Tx < AimingMinAngle){
+                    Robot.driveTrain.ApplyMotorPower(jLeft*(.5+AimingMultiplier), jRight*(1-AimingMultiplier));            // Adjust Left   
+                }
+                else {
+                    Robot.driveTrain.ApplyMotorPower(jLeft, jRight);            // Below minimum needed angle adjustment. Don't adjust
+                }
+            } else {                                                             // Just aim, NO driving
+                if(Tx > AimingMinAngle){
+                    Robot.driveTrain.ApplyMotorPower(AimingPower, -AimingPower);            // Adjust Right
+                }
+                else if (Tx < -AimingMinAngle){
+                    Robot.driveTrain.ApplyMotorPower(-AimingPower, AimingPower);            // Adjust Left
+                }
+                else {Robot.driveTrain.ApplyMotorPower(jLeft,jRight);}            // Not Driving, Just Aim
+            }
+        }
+        else{
+            Robot.driveTrain.ApplyMotorPower(jLeft, jRight);        // No target, just drive
+        }
+    
+    }
+*/
+
+    }
+
