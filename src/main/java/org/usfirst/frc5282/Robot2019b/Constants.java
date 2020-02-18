@@ -29,6 +29,7 @@ public class Constants {
 	public static final double DRIVE_POWER_REDUCTION2 = 1;   // %Reduction: This is for a button that slows the robot down so it is controllable
 	
 	
+	
 	// MOTOR CAN ID numbers _______________________________________________________________________
 	//If you change motor controller types, you must also change it in the declaration.
 	//Search for the constant in the files.  It will be part of the same line...

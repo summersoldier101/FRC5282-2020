@@ -7,14 +7,14 @@
 
 package org.usfirst.frc5282.Robot2019b.commands;
 
-import edu.wpi.first.wpilibj.command.Command;
 import org.usfirst.frc5282.Robot2019b.Robot;
 
-public class FireBall extends Command {
-  public FireBall() {
+import edu.wpi.first.wpilibj.command.Command;
+
+public class Barrelon extends Command {
+  public Barrelon() {
     // Use requires() here to declare subsystem dependencies
-    // eg. requires(chassis);
-    requires(Robot.fire);
+  requires(Robot.barrel);
   }
 
   // Called just before this Command runs the first time
@@ -25,7 +25,7 @@ public class FireBall extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-   Robot.fire.Ballfire();
+    Robot.barrel.BarrelOn();
   }
 
   // Make this return true when this Command no longer needs to run execute()
@@ -43,5 +43,6 @@ public class FireBall extends Command {
   // subsystems is scheduled to run
   @Override
   protected void interrupted() {
+    
   }
 }

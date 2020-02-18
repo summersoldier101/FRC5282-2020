@@ -25,14 +25,19 @@ public class OI {
     public JoystickButton buttonX4;
     public JoystickButton buttonX5;
     public JoystickButton buttonX6;
+    public JoystickButton buttonX7;
+    public JoystickButton buttonX8;
+    public JoystickButton buttonX9;
+    public JoystickButton buttonX10;
+    public Trigger lTrigger;
+
 
    public XboxController xbox2;  
    public JoystickButton buttonXP1;
-
+   public JoystickButton buttonXP2;
 
     public OI() {
-        rightJoystick = new Joystick(2);
-        leftJoystick = new Joystick(3);
+       
        
         xbox = new XboxController(0);     
        
@@ -42,6 +47,12 @@ public class OI {
         buttonX4 = new JoystickButton(xbox, 4);   
         buttonX5 = new JoystickButton(xbox, 5);   
         buttonX6 = new JoystickButton(xbox, 6);
+        buttonX7 = new JoystickButton(xbox, 7);
+        buttonX8 = new JoystickButton(xbox, 8);
+        buttonX9 = new JoystickButton(xbox, 9);
+        buttonX10 = new JoystickButton(xbox, 10);
+        
+      
 
         xbox2 = new XboxController(1);
         buttonXP1 = new JoystickButton(xbox2, 1);
@@ -60,7 +71,7 @@ public class OI {
         // the button is released.
 
         // When Released
-        // button.whenReleased(new ExampleCommand());
+        // button.whenReleased(new ExampleCommand(speen));
         // Start the command when the button is released  and let it run the command
         // until it is finished as determined by it's isFinished method
         
@@ -71,10 +82,11 @@ public class OI {
         //buttonX3.whenPressed(new MT());  
         //buttonX4.whenPressed(new MT());  
        buttonX6.whileHeld(new TargetAdjust());
-       
+       buttonX9.whenPressed(new PipelineTo0());
+       buttonX10.whenPressed(new PipelineTo1());
        
        //2nd xbox controller buttons
-        buttonXP1.whenPressed(new FireBall());
+       // buttonXP1.whenPressed(new FireBall());
         
         
        

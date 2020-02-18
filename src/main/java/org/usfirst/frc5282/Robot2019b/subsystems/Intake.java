@@ -12,7 +12,10 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import org.usfirst.frc5282.Robot2019b.Robot;
 
-//imports for the speed controller Tallons -Jordan
+import org.usfirst.frc5282.Robot2019b.commands.IntakeBall;
+
+//imports for the speed controller Tallons -Jordan; posdion
+
 import com.ctre.phoenix.motorcontrol.*;
 import com.ctre.phoenix.motorcontrol.can.*;
 import edu.wpi.first.wpilibj.Spark;
@@ -24,75 +27,88 @@ import edu.wpi.first.wpilibj.Spark;
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
   // classify things ussing private, public, static
-
+    
+  //private TalonSRX fire;
   private TalonSRX intake;
+  //private VictorSPX fire2;
   private Spark slider;
+  private Spark rotator;
+ 
+  //private boolean lTrigger = true;
+  //private boolean rTrigger = true;
+
+  
 
   private static final double deadbandintake = 0.02;    
-
+  private static final double deadbandfire = 0.02; 
 
   public Intake() {
     //identify new things here Blank =  new Blank
-
-    intake =  new TalonSRX(5);
+    
+    intake = new TalonSRX(6);
     intake.setInverted(false);
     intake.configNeutralDeadband(deadbandintake);
 
-
-    slider = new Spark(6);
+    slider = new Spark(0);
     slider.setInverted(false);
 
+    rotator = new Spark(1);
+    rotator.setInverted(false);
+
+/*
+fire =  new TalonSRX(5);
+    fire2 = new VictorSPX(0);
+    fire.setInverted(false);
+    fire2.setInverted(false);
+    fire.configNeutralDeadband(deadbandfire);
+    fire2.follow(fire);
+    */
 }
   @Override
   public void initDefaultCommand() {
     // Set the default command for a subsystem here.
     // setDefaultCommand(new MySpecialCommand());
-    //setDefaultCommand(new DriveWithXbox()); example for what will go here later
-
+    
+   setDefaultCommand(new IntakeBall()); //the comand that is used for this subsystem
+    
   }
 
-public void BallIntake(){
-ArmPower(.7);
 
 
 
-}
-
-public void Ballfire(){
-  ArmPower(-.7);
-
-
-}
 
 
 
 /*
-public void ArmPower(double P) {                    // Non Joystick control
-        
-  if (P>=1.0){            // Max input is 1.0 to -1.0.
-      P=1.0;
-      }
-  else if (P<=-1.0){
-      P=-1.0;
-  }
-  
-
-  if (Math.abs(P)<=0.08){
-      P=0.00;
-  }
-  
-
-  slider.set(P);
+public void FirePower(double F) {                    // Tankdrive   
+  fire.set(ControlMode.PercentOutput, F,DemandType.ArbitraryFeedForward, 0);
+  fire2.set(ControlMode.PercentOutput, F,DemandType.ArbitraryFeedForward, 0);
 }
 */
+public void IntakePower(double I){
+  intake.set(ControlMode.PercentOutput, I, DemandType.ArbitraryFeedForward, 0);
+}
 
-
-
-public void ArmPower(double P) {                    // Tankdrive
         
-        
-  intake.set(ControlMode.PercentOutput, P);
+ 
   
 
-}
+  
+  public void BallIntake(){
+   
+    double lTrigger = -.35 * Robot.oi.xbox2.getRawAxis(2);
+    IntakePower(lTrigger); 
+
+
+    }
+
+    /*
+    public void Ballfire(){
+      double rTrigger = 1.0 * Robot.oi.xbox2.getRawAxis(3);
+    
+      FirePower(rTrigger); 
+    }
+    */
+    
+
   }

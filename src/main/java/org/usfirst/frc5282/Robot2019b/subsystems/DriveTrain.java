@@ -8,6 +8,7 @@ import org.usfirst.frc5282.Robot2019b.commands.*;
 
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import org.usfirst.frc5282.Robot2019b.subsystems.Intake;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
  
@@ -28,6 +29,8 @@ import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 
 //import com.kauailabs.navx.frc.AHRS; // NavX
 import edu.wpi.first.wpilibj.SPI;   // NavX
+
+
 
 
 /**
@@ -65,8 +68,10 @@ LimeLight lime;
     private double AimingPower=0.5;             // Just aim with this power   5           Power to just aim if you are virtually stoppped.
     
     //Variables for inputs
-    private double jLeft = 0.0;              //Joystick left input
-    private double jRight = 0.0;             // Joystick right input
+    private boolean buttonX7 = true ;              //Joystick left input
+    private boolean buttonX8 = true;  
+    private boolean buttonXP1 = true;
+     private boolean buttonXP2= true;          // Joystick right input
     private double jAverage = 0.0;           
 
     //=======================================================================================================
@@ -210,13 +215,21 @@ LimeLight lime;
         MechPower(Jx,Jy,Jz);
 
       
-
-       
+      
+           
+           //Robot.intake.BallStop();
+            //System.out.println("pressed");
+            
+          }
+         // if(buttonXP2){
+            //Robot.intake.Ballfire();
+            
+            //System.out.println("pressed");
+         // }
         
                                 
     
-    }
-
+    
 
     public void MechPower(double Jx, double Jy, double Jz) { 
         double r = Math.hypot(Jx, Jy);
@@ -226,9 +239,9 @@ LimeLight lime;
         double RF = r * Math.sin(robotAngle) - rightX;
         double LR = r * Math.sin(robotAngle) + rightX;
         double RR = r * Math.cos(robotAngle) - rightX;
-        System.out.println("LF:" + LF + "  RF:" + RF );
-        System.out.println("LR:" + LR + "  RR:" + RR );
-        System.out.println("SubsystemDriveWithXbox ");
+       // System.out.println("LF:" + LF + "  RF:" + RF );
+       // System.out.println("LR:" + LR + "  RR:" + RR );
+      //  System.out.println("SubsystemDriveWithXbox ");
 
         SmartDashboard.putNumber("LF", LF);
         SmartDashboard.putNumber("RF", RF);
@@ -241,8 +254,19 @@ LimeLight lime;
        DriveRF.set(ControlMode.PercentOutput, RF, DemandType.ArbitraryFeedForward, 0);  // this was oringaly used for arcade drive
        DriveRB.set(ControlMode.PercentOutput, RR, DemandType.ArbitraryFeedForward, 0);  // this was oringaly used for arcade                      
     
-    }
 
+    /*
+      buttonXP1 = Robot.oi.xbox2.getRawButton(1);     // Get joystick input
+      // buttonXP2 = Robot.oi.xbox2.getRawButton(2);  
+       if(buttonXP1){
+       
+               Robot.intake.Ballfire();
+               
+                }
+                Robot.driveTrain.MechPower(Jx, Jy, Jz);
+           }
+    */
+    }
 
 
 
@@ -265,7 +289,7 @@ public void TargetAdjust(){
     double Tx = tx.getDouble(-1);
     double Ty = ty.getDouble(-1);
     double Tl = tl.getDouble(-1);
-    double Tarea = ta.getDouble(0.0);
+    double Ta = ta.getDouble(0.0);
     System.out.println("Limelight Data Tx "+Tx+" Ty "+Ty);
     /*
     Jy = -Robot.oi.xbox.getY();     // Get joystick input jleft
@@ -275,69 +299,110 @@ public void TargetAdjust(){
     double Jx=Robot.oi.xbox.getX(Hand.kLeft)*1;
     double Jz=Robot.oi.xbox.getX(Hand.kRight)*1;
     
-    System.out.println("Target Aim Data:  x"+Tx+" y"+Ty+" l"+Tl+" a"+Tarea);
-    System.out.println(" Jy"+Jy+" Jx"+Jx+"jAverage"+jAverage);
+    //System.out.println("Target Aim Data:  x"+Tx+" y"+Ty+" l"+Tl+" a"+Tarea);
+    //System.out.println(" Jy"+Jy+" Jx"+Jx+"jAverage"+jAverage);
 
+    buttonX7 = Robot.oi.xbox.getRawButton(7);     // Get joystick input
+    buttonX8 = Robot.oi.xbox.getRawButton(8);  
+    System.out.println("targetting");
     
+
+   
+
     if (Tl==1){                                  // Is there a target?        
         
                                    // Driver Forwards and Aim
-            if(Tx > 10){
-                     Jz = Jz+.3;
-            }
-            else if (Tx> 6) {
-                Jz= Jz + (Tx-2)/(10-2)*.3;
-
-            }
-                 else if (Tx> 2){
-                     Jz=Jz + (Tx-2)/(10-2)*.3;
-                 }
-                 else if (Tx> 0){
-                    //do nothing
-
-                 
-                 }        
-            else if (Tx < -10){
-                Jz= Jz-.3;  
-            }
-            else if (Tx<- 6) {
-                Jz= Jz + (-Tx-2)/(10-2)*.3;
-
-            }
-                else if (Tx< -2){
-                    Jz=Jz - (-Tx-2)/(10-2)*.3;
-                }
-                else if (Tx< 0){
-                    
-                }
-            }
             
-          Robot.driveTrain.MechPower(Jx, Jy, Jz);
+        if(buttonX7){
+            if(Tx > 10){
+                Jz = Jz+.3;
+       }
+       else if (Tx> 6) {
+           Jz= Jz + (Tx-2)/(10-2)*.3;
+
+       }
+            else if (Tx> 2){
+                Jz=Jz + (Tx-2)/(10-2)*.3;
+            }
+            else if (Tx> 0){
+               //do nothing
+
+            
+            }        
+       else if (Tx < -10){
+           Jz= Jz-.3;  
+       }
+       else if (Tx<- 6) {
+           Jz= Jz + (-Tx-2)/(10-2)*.3;
+
+       }
+           else if (Tx< -2){
+               Jz=Jz - (-Tx-2)/(10-2)*.3;
+           }
+           else if (Tx< 0){
+               
+           }
+       }
+       
+
         }
+        if(buttonX8){
+            if(Tl==1){
+                if(Ta < +3.450){
+                    Jy = Jy+.5;
+                }
+                else if (Ta > +2.5){
+                    Jy= Jy + (-Ty-2)/(10-2)*.3;
+                }
+                else if (Ta > +8.134 ){
+                    Jy= Jy-2;
+                }
+                if(Ta < +.115){
+                    Jy= Jy-.5;
+                }
+            }
+        }
+        Robot.driveTrain.MechPower(Jx, Jy, Jz);
+        }
+                /*
+                if(Tx > 20){
+                    
+                    Jx=Jx +.5;
+            
+                }
+                else if (Tx > 6){
+                    Jx= Jx + (-Ty-2)/(10-2)*.3;
+                }
+                else if (Tx > 2){
+                    Jx=Jx + (-Ty-2)/(10-2)*.3;
+            
+                }
+                else if (Tx>0){
+                    //do nothing
+                }
+                else if (Tx < -20){
+                    Jx=Jx - .5;
+                }
+                else if (Tx < -6){
+                    Jx=Jx - (Ty-2)/(10-2)*.3;
+                }
+                else if (Tx < -2){
+                    Jx=Jx - (Ty-2)/(10-2)*.3;
+                }
+                
 
-
-
-/*
-if(Tl==1){
-    if(Ty > 10){
-        Jx=Jx +.5;
-
+            }
+       
+            
+        }
+        Robot.driveTrain.MechPower(Jx, Jy, Jz);
     }
-    else if (Tx > 6){
-        Jx= Jx + (Ty-2)/(10-2)*.3;
-    }
-    else if (Tx > 2){
-        Jx=Jx + (Ty-2)/(10-2)*.3;
 
-    }
-    else if (Tx>0){
-        //do nothing
-    }
-    Robot.driveTrain.MechPower(Jx, Jy, Jz);
 
-}
 
-*/
+
+
+
         /* move at target
         if(Tl==1){
             if(Ty > -25){
@@ -430,7 +495,7 @@ public void MotorPower(double L, double R) {                    // Tankdrive
         DriveLB.setSelectedSensorPosition(0, 0, kdTimeoutMs);   /* Zero the sensor */
         DriveRF.setSelectedSensorPosition(0, 0, kdTimeoutMs);   /* Zero the sensor */
         DriveRB.setSelectedSensorPosition(0, 0, kdTimeoutMs);   /* Zero the sensor */
-        System.out.println(".    SensorZero - Drive Train called.");
+      //  System.out.println(".    SensorZero - Drive Train called.");
     }
     
 
@@ -455,7 +520,18 @@ public void MotorPower(double L, double R) {                    // Tankdrive
 
     }
 
+    public void PastLine(){
+        double percent;     
+        long startTime=0;       // Start timer for the stop
 
+        startTime=System.currentTimeMillis();
+
+        ApplyMotorPower(.5, .5);
+        if (System.currentTimeMillis()>startTime+3){ // 3 milliseconds after the button is pressed print line Finished
+            System.out.println("Finished");
+        }
+        System.exit(1);
+    }
 
 
 /*

@@ -8,7 +8,7 @@ import org.usfirst.frc5282.Robot2019b.LimeLight;
  */
 public class PipelineTo1 extends InstantCommand {
   
-  LimeLight _lime;
+  LimeLight lime;
 
   /**
    * Command changes limelight to pipeline 0
@@ -23,7 +23,7 @@ public class PipelineTo1 extends InstantCommand {
   protected void initialize() {
     
    
-    _lime.setPipeline(1);
+    lime.setPipeline(1);
    
   }
 
