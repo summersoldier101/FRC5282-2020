@@ -28,9 +28,9 @@ import edu.wpi.first.wpilibj.Spark;
   // here. Call these from Commands.
   // classify things ussing private, public, static
     
-  //private TalonSRX fire;
+  
   private TalonSRX intake;
-  //private VictorSPX fire2;
+ 
   private Spark slider;
   private Spark rotator;
  
@@ -52,8 +52,7 @@ import edu.wpi.first.wpilibj.Spark;
     slider = new Spark(0);
     slider.setInverted(false);
 
-    rotator = new Spark(1);
-    rotator.setInverted(false);
+    
 
 /*
 fire =  new TalonSRX(5);

@@ -115,7 +115,7 @@ LimeLight lime;
         
         //________ Left Rear Motor
 
-        DriveLB = new TalonSRX(4);                        // CAN ID
+        DriveLB = new TalonSRX(4);                        // CAN ID 4
         DriveLB.configFactoryDefault();                   // rest to default
         DriveLB.setInverted(false);                       // Motor Direction with respect to green LED
         DriveLB.setSensorPhase(true);                    // Sensor diretion with respect to green LED
@@ -150,7 +150,7 @@ LimeLight lime;
 
        //________ Right Rear Motor
 
-       DriveRB = new TalonSRX(3);                        // CAN ID
+       DriveRB = new TalonSRX(3);                        // CAN ID 3
        DriveRB.configFactoryDefault();                   // rest to default
        DriveRB.setInverted(true);                       // Motor Direction with respect to green LED
        DriveRB.setSensorPhase(true);                    // Sensor diretion with respect to green LED

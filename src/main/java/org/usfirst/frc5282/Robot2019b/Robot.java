@@ -31,6 +31,7 @@ public class Robot extends TimedRobot {
     public static Barrel barrel;
     public static Wench wench;
     public static Fire fire;
+    public static Rotator rotator;
     Command autonomousCommand;
     SendableChooser<Command> chooser = new SendableChooser<>();
 
@@ -74,6 +75,7 @@ public class Robot extends TimedRobot {
         oi = new OI();
         limeLight = new LimeLight();
         barrel = new Barrel();
+        rotator = new Rotator();
         // Add commands to Autonomous Sendable Chooser
         
        // chooser.setDefaultOption("Autonomous Command", new AutonomousCommand());
