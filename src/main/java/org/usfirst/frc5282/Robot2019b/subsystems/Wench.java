@@ -24,22 +24,24 @@ public class Wench extends Subsystem {
   // here. Call these from Commands.
   private TalonSRX wench;
 
-  private boolean buttonXP5= true;
-  private boolean buttonXP6= true;
+  private boolean WhiteB1 = false;
+  private boolean WhiteB2= false;
+  private boolean WhiteB3= false;
 
   public void Wench(){
     wench = new TalonSRX(8);
   } 
 
     public void WenchUp() {
-      WenchPower(1);
+      WenchPower(.5);
     }
     
-    private void WenchPower(int i) {
+    private void WenchPower(double w) {
+      wench.set(ControlMode.PercentOutput, w, DemandType.ArbitraryFeedForward, 0);
   }
 
   public void WenchDown() {
-      WenchPower(-1);
+      WenchPower(-.5);
     }
     
     private void WenchStop(){
@@ -47,24 +49,25 @@ public class Wench extends Subsystem {
     }
     
       public void WenchOn(){
-         buttonXP5 = Robot.oi.xbox2.getRawButton(5);
-         buttonXP6 = Robot.oi.xbox2.getRawButton(6);
-    
-        if(buttonXP5){
-          WenchUp();
-         
-        } 
-        else if(buttonXP5){
-          //Do nothing
-        }
-        else if(buttonXP6){
-           WenchDown();
-        }
-        else if(buttonXP6){
-            // do nothing
+         WhiteB1 = Robot.oi.buttonboard.getRawButton(1);
+         WhiteB2 = Robot.oi.buttonboard.getRawButton(2);
+         WhiteB3 = Robot.oi.buttonboard.getRawButton(3);
+        
+         if((WhiteB1&&WhiteB2)||(!WhiteB1&&!WhiteB2)){
+          WenchStop();
+         }
+         else
+         {
+          if(WhiteB1){
+            WenchUp();
+          }
+          if(WhiteB2){
+            WenchDown();
+          }
+         }
         }    
 
-  }
+  
   @Override
   public void initDefaultCommand() {
     // Set the default command for a subsystem here.

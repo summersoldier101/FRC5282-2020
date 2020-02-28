@@ -11,10 +11,9 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import org.usfirst.frc5282.Robot2019b.subsystems.Intake;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
- 
-import edu.wpi.first.networktables.NetworkTable;            //!! Limelight
-import edu.wpi.first.networktables.NetworkTableEntry;       //!! Limelight
-import edu.wpi.first.networktables.NetworkTableInstance;    //!! Limelight
+import edu.wpi.first.networktables.NetworkTable; //!! Limelight
+import edu.wpi.first.networktables.NetworkTableEntry; //!! Limelight
+import edu.wpi.first.networktables.NetworkTableInstance; //!! Limelight
 import edu.wpi.first.wpilibj.DriverStation;
 
 import java.sql.Driver;
@@ -28,7 +27,8 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 
 //import com.kauailabs.navx.frc.AHRS; // NavX
-import edu.wpi.first.wpilibj.SPI;   // NavX
+import edu.wpi.first.wpilibj.SPI; // NavX
+import edu.wpi.first.wpilibj.Timer;
 
 
 
@@ -68,11 +68,13 @@ LimeLight lime;
     private double AimingPower=0.5;             // Just aim with this power   5           Power to just aim if you are virtually stoppped.
     
     //Variables for inputs
-    private boolean buttonX7 = true ;              //Joystick left input
-    private boolean buttonX8 = true;  
-    private boolean buttonXP1 = true;
-     private boolean buttonXP2= true;          // Joystick right input
-    private double jAverage = 0.0;           
+    //private boolean buttonX7 = true ;              //Joystick left input
+   // private boolean buttonX8 = true;  
+    private boolean buttonX1 = true;
+     private boolean buttonX2= true;          // Joystick right input
+    private double jAverage = 0.0;          
+    
+    
 
     //=======================================================================================================
 
@@ -302,8 +304,8 @@ public void TargetAdjust(){
     //System.out.println("Target Aim Data:  x"+Tx+" y"+Ty+" l"+Tl+" a"+Tarea);
     //System.out.println(" Jy"+Jy+" Jx"+Jx+"jAverage"+jAverage);
 
-    buttonX7 = Robot.oi.xbox.getRawButton(7);     // Get joystick input
-    buttonX8 = Robot.oi.xbox.getRawButton(8);  
+    buttonX1 = Robot.oi.xbox.getRawButton(1);     // Get joystick input
+    buttonX2 = Robot.oi.xbox.getRawButton(2);  
     System.out.println("targetting");
     
 
@@ -313,7 +315,7 @@ public void TargetAdjust(){
         
                                    // Driver Forwards and Aim
             
-        if(buttonX7){
+        if(buttonX1){
             if(Tx > 10){
                 Jz = Jz+.3;
        }
@@ -346,7 +348,7 @@ public void TargetAdjust(){
        
 
         }
-        if(buttonX8){
+        if(buttonX2){
             if(Tl==1){
                 if(Ta < +3.450){
                     Jy = Jy+.5;
@@ -520,6 +522,12 @@ public void MotorPower(double L, double R) {                    // Tankdrive
 
     }
 
+    
+ //   public void PastLine(){
+               
+        
+        
+/*
     public void PastLine(){
         double percent;     
         long startTime=0;       // Start timer for the stop
@@ -532,7 +540,7 @@ public void MotorPower(double L, double R) {                    // Tankdrive
         }
         System.exit(1);
     }
-
+*/
 
 /*
     public void TargetAdjust(){
@@ -618,5 +626,6 @@ public void MotorPower(double L, double R) {                    // Tankdrive
     }
 */
 
-    }
+   // }
+}
 

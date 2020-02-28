@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj.command.Command;
 import org.usfirst.frc5282.Robot2019b.commands.*;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 
-                    
+
 //import edu.wpi.first.cameraserver.CameraServer; USB Camera (on roboRio?)
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard; 
@@ -32,6 +32,8 @@ public class Robot extends TimedRobot {
     public static Wench wench;
     public static Fire fire;
     public static Rotator rotator;
+    public static IntakeSlider intakeSlider;
+    
     Command autonomousCommand;
     SendableChooser<Command> chooser = new SendableChooser<>();
 
@@ -74,8 +76,11 @@ public class Robot extends TimedRobot {
         intake = new Intake();
         oi = new OI();
         limeLight = new LimeLight();
-        barrel = new Barrel();
+        barrel = new Barrel(); 
+        intakeSlider = new IntakeSlider();
         rotator = new Rotator();
+        wench = new Wench();
+        fire = new Fire();
         // Add commands to Autonomous Sendable Chooser
         
        // chooser.setDefaultOption("Autonomous Command", new AutonomousCommand());
@@ -109,14 +114,14 @@ public class Robot extends TimedRobot {
         autonomousCommand = chooser.getSelected();
         //if (autonomousCommand != null) autonomousCommand.start();  // schedule the autonomous command (example)
         if (autonomousCommand != null) autonomousCommand.cancel();   // don't run the command called "AtonomousCommand"
+        
         new DrivePastLine().start();
-
     }
 
     
     @Override
     public void autonomousPeriodic() {
-        
+      
         Scheduler.getInstance().run();
     }
 

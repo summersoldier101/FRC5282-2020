@@ -32,9 +32,18 @@ public class OI {
     public Trigger lTrigger;
 
 
-   public XboxController xbox2;  
+   public XboxController xbox2; 
    public JoystickButton buttonXP1;
    public JoystickButton buttonXP2;
+
+   public Joystick buttonboard;
+   public JoystickButton WhiteB1;
+   public JoystickButton WhiteB2;
+   public JoystickButton WhiteB3;
+   public JoystickButton RedB;
+   public JoystickButton YellowB;
+   public JoystickButton GreenB;
+   public JoystickButton BlueB;
 
     public OI() {
        
@@ -56,6 +65,17 @@ public class OI {
 
         xbox2 = new XboxController(1);
         buttonXP1 = new JoystickButton(xbox2, 1);
+
+
+
+        buttonboard = new Joystick(3);
+        WhiteB1 = new JoystickButton(buttonboard, 1);
+        WhiteB2 = new JoystickButton(buttonboard, 2);
+        WhiteB3 = new JoystickButton(buttonboard, 3);
+        RedB = new JoystickButton(buttonboard, 4);
+        YellowB = new JoystickButton(buttonboard, 5);
+        GreenB = new JoystickButton(buttonboard, 6);
+        BlueB = new JoystickButton(buttonboard, 7);
         
         //=======================================================================================================
         //// TRIGGERING COMMANDS WITH BUTTONS
@@ -82,8 +102,8 @@ public class OI {
         //buttonX3.whenPressed(new MT());  
         //buttonX4.whenPressed(new MT());  
        buttonX6.whileHeld(new TargetAdjust());
-       buttonX9.whenPressed(new PipelineTo0());
-       buttonX10.whenPressed(new PipelineTo1());
+       buttonX7.whenPressed(new PipelineTo0());
+       buttonX8.whenPressed(new PipelineTo1());
        
        //2nd xbox controller buttons
        // buttonXP1.whenPressed(new FireBall());

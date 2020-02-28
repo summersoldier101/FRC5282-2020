@@ -7,6 +7,7 @@
 
 package org.usfirst.frc5282.Robot2019b.subsystems;
 
+import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 import com.ctre.phoenix.motorcontrol.*;
@@ -23,11 +24,11 @@ public class Barrel extends Subsystem {
   private TalonSRX Barrel;
   
  
-  private boolean buttonXP1= true;
-  private boolean buttonXP2= true;
+  private boolean buttonXP1= false;
+  private boolean buttonXP2= false;
 
   public Barrel(){
-    Barrel = new TalonSRX(8);
+    Barrel = new TalonSRX(7);
     Barrel.setInverted(false);
     Barrel.configFactoryDefault();
     
@@ -37,39 +38,34 @@ private void BarrelPower(double B){
   Barrel.set(ControlMode.PercentOutput, B, DemandType.ArbitraryFeedForward, 0);
 }
 
-private void BarrelUp(){
-  BarrelPower(1);
+public void BarrelOn(){
+  buttonXP1 = Robot.oi.xbox2.getRawButton(1);
+  buttonXP2 = Robot.oi.xbox2.getRawButton(2);
+  if((buttonXP1&&buttonXP2)||(!buttonXP1&&!buttonXP2)){    // If button one or two but not both...
+  BarrelStop();
+   
+  }
+  else 
+  {
+     if(buttonXP1){              // button 1
+      BarrelPower(.75);
+      }
+      if(buttonXP2){            // button 2
+      BarrelPower(-.75);
+  } 
+ 
+ }
+ 
+  //double Jy=.5*Robot.oi.xbox.getY(Hand.kLeft)*1;
+ // buttonXP1 = Robot.oi.xbox2.getRawButton(1);
 }
 
-private void BarrelDown(){
-  BarrelPower(-1);
-}
 
 private void BarrelStop(){
   BarrelPower(0);
 }
 
-  public void BarrelOn(){
-     buttonXP1 = Robot.oi.xbox2.getRawButton(1);
-     buttonXP2 = Robot.oi.xbox2.getRawButton(2);
-
-    if(buttonXP1){
-      BarrelUp();
-     
-    } 
-    else if(buttonXP1){
-      //Do nothing
-    }
-    else if(buttonXP2){
-       BarrelDown();
-    }
-    else if(buttonXP2){
-        // do nothing
-    }
-     
-
-  }
-
+  
   @Override
   public void initDefaultCommand() {
     // Set the default command for a subsystem here.

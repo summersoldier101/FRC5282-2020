@@ -6,52 +6,48 @@
 /*----------------------------------------------------------------------------*/
 
 package org.usfirst.frc5282.Robot2019b.subsystems;
-import org.usfirst.frc5282.Robot2019b.Robot;
-import org.usfirst.frc5282.Robot2019b.commands.RotateFire;
+
 import edu.wpi.first.wpilibj.command.Subsystem;
+import org.usfirst.frc5282.Robot2019b.Robot;
+import org.usfirst.frc5282.Robot2019b.commands.SliderMove;
+
 import edu.wpi.first.wpilibj.Spark;
 
 /**
  * Add your docs here.
  */
-public class Rotator extends Subsystem {
+public class Slider extends Subsystem {
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
- private Spark Rotator;
-
- private static final double deadbandrotator = 0.02;   
+  private Spark slider;
 
 
-public Rotator(){
-Rotator = new Spark(1);
-Rotator.setInverted(false);
+  public void Slider(){
+    slider = new Spark(0);
+    slider.setInverted(false);
 
-
-}
-
+  }
   @Override
   public void initDefaultCommand() {
     // Set the default command for a subsystem here.
     // setDefaultCommand(new MySpecialCommand());
-    setDefaultCommand(new RotateFire());
+    setDefaultCommand(new SliderMove());
   }
 
-public void RotatorPower(double R){
-  if (R>=1){            // Max input is 1.0 to -1.0.
-    R=1;
+  public void SliderPower(double S){
+    if(S>=1){
+      S=1;
     }
-else if (R<=-1){
-    R=-1;
-}
+    else if(S<=1){
+      S=-1;
+    }
 
-Rotator.set(R);
-}
+    slider.set(S);
+  }
 
-public void Rotate(){
-double Xleftjoystick = .3* Robot.oi.xbox2.getRawAxis(1);
-RotatorPower(Xleftjoystick);
-
-
+public void Slide(){
+  double XrightJoystick = .4* Robot.oi.xbox2.getRawAxis(0);
+  SliderPower(XrightJoystick);
 }
 
 }
