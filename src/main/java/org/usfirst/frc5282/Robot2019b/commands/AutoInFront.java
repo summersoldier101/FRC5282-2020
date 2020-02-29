@@ -12,31 +12,52 @@ import edu.wpi.first.wpilibj.command.InstantCommand;
  */
 public class AutoInFront extends InstantCommand {
 
+double myStartTime;
+double myTime;
+boolean myAutonFinished = false;
+
   
 
-    public AutoInFront() {
-        requires(Robot.driveTrain);
-       // requires(Robot.rotator);
-       // requires(Robot.fire);
-    }
- // Called just before this Command runs the first time
- @Override
- protected void initialize() {
- }
+public AutoInFront() {
+    requires(Robot.driveTrain);
+    // requires(Robot.rotator);
+    // requires(Robot.fire);
+}
+
+
+// Called just before this Command runs the first time
+@Override
+protected void initialize() {
+    myStartTime = System.currentTimeMillis();
+    System.out.println("myStartTime "+myStartTime);
+     myTime = 0.0;
+}
+
 
  // Called repeatedly when this Command is scheduled to run
  @Override
  protected void execute() {
    //Robot.driveTrain.PastLine();
-   double percent;
-   long startTime=0;
+   
+  myTime = (System.currentTimeMillis()-myStartTime)/1000;
+  System.out.println("myTime "+myTime);
+  if ((myTime>=0.0)&&(myTime<2.0)) { System.out.println("Stage 1");}
+  if ((myTime>=2.0)&&(myTime<4.0)) { System.out.println("Stage 2");}
+  if ((myTime>=3.0)&&(myTime<6.0)) { System.out.println("Stage 3");}
  
-  
+  if ((myTime>=10)) { myAutonFinished = true;}
+ 
+ 
+
+
+
+
+
    //while(state<100);{
     // System.out.println("STATE WORKING");
-    startTime=System.currentTimeMillis();
+    //startTime=System.currentTimeMillis();
     //if (System.currentTimeMillis()>startTime+3){
-      System.out.println("State 1 timed out.");
+    /*  System.out.println("State 1 timed out.");
       Robot.driveTrain.ApplyMotorPower(-.26, -.25);
       Timer.delay(2);
       Robot.driveTrain.ApplyMotorPower(0, 0);
@@ -51,6 +72,7 @@ public class AutoInFront extends InstantCommand {
       Timer.delay(6);
       Robot.driveTrain.ApplyMotorPower(0, 0);
       Timer.delay(3);
+*/
 
      
     //}
@@ -94,7 +116,8 @@ switch(state){
  // Make this return true when this Command no longer needs to run execute()
  @Override
  protected boolean isFinished() {
-   return false;
+   
+  return myAutonFinished;
  }
 
  // Called once after isFinished returns true
