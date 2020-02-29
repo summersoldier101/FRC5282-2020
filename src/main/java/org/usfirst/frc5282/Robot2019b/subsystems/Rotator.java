@@ -54,4 +54,9 @@ RotatorPower(Xleftjoystick);
 
 }
 
+public void RotateAuto(){
+RotatorPower(.1);
+
+
+}
 }

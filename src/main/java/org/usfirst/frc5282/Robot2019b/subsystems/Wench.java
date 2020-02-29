@@ -37,7 +37,7 @@ public class Wench extends Subsystem {
     }
     
     private void WenchPower(double w) {
-      wench.set(ControlMode.PercentOutput, w, DemandType.ArbitraryFeedForward, 0);
+     //% wench.set(ControlMode.PercentOutput, w, DemandType.ArbitraryFeedForward, 0);
   }
 
   public void WenchDown() {

@@ -114,8 +114,9 @@ public class Robot extends TimedRobot {
         autonomousCommand = chooser.getSelected();
         //if (autonomousCommand != null) autonomousCommand.start();  // schedule the autonomous command (example)
         if (autonomousCommand != null) autonomousCommand.cancel();   // don't run the command called "AtonomousCommand"
+       //new AutoInFront().start();
+       new AutoFeed().start();
         
-        new DrivePastLine().start();
     }
 
     
@@ -123,6 +124,7 @@ public class Robot extends TimedRobot {
     public void autonomousPeriodic() {
       
         Scheduler.getInstance().run();
+        
     }
 
 

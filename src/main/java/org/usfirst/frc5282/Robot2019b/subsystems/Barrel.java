@@ -38,6 +38,10 @@ private void BarrelPower(double B){
   Barrel.set(ControlMode.PercentOutput, B, DemandType.ArbitraryFeedForward, 0);
 }
 
+private void BarrelStop(){
+  BarrelPower(0);
+}
+
 public void BarrelOn(){
   buttonXP1 = Robot.oi.xbox2.getRawButton(1);
   buttonXP2 = Robot.oi.xbox2.getRawButton(2);
@@ -56,13 +60,17 @@ public void BarrelOn(){
  
  }
  
-  //double Jy=.5*Robot.oi.xbox.getY(Hand.kLeft)*1;
- // buttonXP1 = Robot.oi.xbox2.getRawButton(1);
+  
 }
 
 
-private void BarrelStop(){
-  BarrelPower(0);
+public void BarrelOnAuto(){
+      BarrelPower(.35);
+}
+
+public void BarrelDownAuto(){
+    BarrelPower(-.35);
+
 }
 
   

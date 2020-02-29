@@ -31,8 +31,7 @@ import edu.wpi.first.wpilibj.Spark;
   
   private TalonSRX intake;
  
-  private Spark slider;
-  private Spark rotator;
+  
  
   //private boolean lTrigger = true;
   //private boolean rTrigger = true;
@@ -49,8 +48,7 @@ import edu.wpi.first.wpilibj.Spark;
     intake.setInverted(false);
     intake.configNeutralDeadband(deadbandintake);
 
-    slider = new Spark(0);
-    slider.setInverted(false);
+    
 
     
 
@@ -101,13 +99,10 @@ public void IntakePower(double I){
 
     }
 
-    /*
-    public void Ballfire(){
-      double rTrigger = 1.0 * Robot.oi.xbox2.getRawAxis(3);
-    
-      FirePower(rTrigger); 
+    public void AutoFeedball(){
+      IntakePower(-.30);
+
     }
-    */
     
 
   }

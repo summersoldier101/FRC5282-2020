@@ -53,4 +53,9 @@ public class Fire extends Subsystem {
   
     FirePower(rTrigger); 
   }
+
+  public void BallfireAuto(){
+    FirePower(.9);
+
+  }
 }

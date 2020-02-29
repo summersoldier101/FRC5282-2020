@@ -9,32 +9,35 @@ package org.usfirst.frc5282.Robot2019b.commands;
 
 import org.usfirst.frc5282.Robot2019b.Robot;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 
-
-public class Move extends Command {
-  public Move() {
+public class AutoFeed extends Command {
+  public AutoFeed() {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
-    requires(Robot.driveTrain);
+    requires(Robot.intake);
   }
 
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    Robot.driveTrain.ApplyMotorPower(.2, -.2);
+    long startTime=0;
 
+    startTime=System.currentTimeMillis();
     
-
-
+    Robot.barrel.BarrelDownAuto();
+    //Robot.intake.AutoFeedball();
+    Timer.delay(8);
+    Robot.driveTrain.ApplyMotorPower(.25, .25);
+    Timer.delay(2);
+    Robot.driveTrain.TurnAuto(-.50, .50);
   }
-
 
   // Make this return true when this Command no longer needs to run execute()
   @Override

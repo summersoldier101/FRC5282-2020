@@ -187,12 +187,8 @@ LimeLight lime;
     public void periodic() {
         // Put code here to be run every loop              
        // System.out.println("DriveTrain Subsystem Gyro:"+Robot.driveTrain.getGyroAngle()); 
-       
        //SmartDashboard.putNumber("NavX", ahrs.getAngle());
-       //SmartDashboard.putNumber("Gyro Angle", Gyro1.getAngle());
-       //SmartDashboard.putNumber("Gyro Rate", Gyro1.getRate());
-       //SmartDashboard.putNumber("Gyro Offset", Gyro1.getOffset());
-       
+      
     }
 
   
@@ -437,44 +433,62 @@ public void TargetAdjust(){
 
     
 
-/* old tank drive aiming code
-if (jAverage>=AimThresholdPower){                               // Driver Forwards and Aim
-    if(Tx > AimingMinAngle){
-        Robot.driveTrain.ApplyMotorPower(Jy*(.5+AimingMultiplier), Jx*(1-AimingMultiplier));            // Adjust Right    used to be 1
-    }
-    else if (Tx < -AimingMinAngle){
-        Robot.driveTrain.ApplyMotorPower(Jy*(.5-AimingMultiplier), Jx*(1+AimingMultiplier));            // Adjust Left
-    }
-    else {
-        Robot.driveTrain.ApplyMotorPower(Jy, Jx);            // Below angle adjustment. Adjust none. 
-    }
-}
-else if (jAverage<=-AimThresholdPower){                         // Drive backwards and Aim
-    if(Tx > AimingMinAngle){
-        Robot.driveTrain.ApplyMotorPower(Jy*(.5-AimingMultiplier), Jx*(1+AimingMultiplier));            // Adjust Right
-    }
-    else if (Tx < AimingMinAngle){
-        Robot.driveTrain.ApplyMotorPower(Jy*(.5+AimingMultiplier), Jx*(1-AimingMultiplier));            // Adjust Left   
-    }
-    else {
-        Robot.driveTrain.ApplyMotorPower(Jy, Jx);            // Below minimum needed angle adjustment. Don't adjust
-    }
-} else {                                                             // Just aim, NO driving
-    if(Tx > AimingMinAngle){
-         if(Tx> AimingMinAngle+5){AimingPower= .3;}          // Reduce power .3
+public void TargetAdjustAuto(){
 
-        Robot.driveTrain.ApplyMotorPower(AimingPower, -AimingPower);  
-                   }
-    else if (Tx < -AimingMinAngle){
-        if(Tx< -AimingMinAngle+5){AimingPower= .3;}        // Reduce power .3
-        Robot.driveTrain.ApplyMotorPower(-AimingPower, AimingPower);    
-        
-    }
-    else {Robot.driveTrain.ApplyMotorPower(Jy,Jx);}            // Not Driving, Just Aim
-}
-}
-*/
+    NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
+    NetworkTableEntry tx = table.getEntry("tx");
+    NetworkTableEntry ty = table.getEntry("ty");
+    NetworkTableEntry ta = table.getEntry("ta");
+    NetworkTableEntry tl = table.getEntry("tv");
 
+    double Tx = tx.getDouble(-1);
+    double Ty = ty.getDouble(-1);
+    double Tl = tl.getDouble(-1);
+    double Ta = ta.getDouble(0.0);
+    System.out.println("Limelight Data Tx "+Tx+" Ty "+Ty);
+    /*
+    Jy = -Robot.oi.xbox.getY();     // Get joystick input jleft
+    Jx = -Robot.oi.xbox2.getX();     // jright  
+    */                 
+    double Jy=-1*Robot.oi.xbox.getY(Hand.kLeft)*1;
+    double Jx=Robot.oi.xbox.getX(Hand.kLeft)*1;
+    double Jz=Robot.oi.xbox.getX(Hand.kRight)*1;
+
+    if (Tl==1){                               
+
+
+
+    if(Tx > 10){
+        Jz = Jz+.3;
+    }
+    else if (Tx> 6) {
+            Jz= Jz + (Tx-2)/(10-2)*.3;
+
+    }
+    else if (Tx> 2){
+        Jz=Jz + (Tx-2)/(10-2)*.3;
+    }
+    else if (Tx> 0){
+        //do nothing
+
+
+    }        
+    else if (Tx < -10){
+        Jz= Jz-.3;  
+    }
+    else if (Tx<- 6) {
+        Jz= Jz + (-Tx-2)/(10-2)*.3;
+
+    }
+    else if (Tx< -2){
+        Jz=Jz - (-Tx-2)/(10-2)*.3;
+    }
+    else if (Tx< 0){
+
+    }
+        Robot.driveTrain.MechPower(Jx, Jy, Jz);
+    }
+    }
 
 
 
@@ -516,10 +530,15 @@ public void MotorPower(double L, double R) {                    // Tankdrive
         DriveRB.set(ControlMode.PercentOutput, R, DemandType.ArbitraryFeedForward, 0);  // With the zero at the end I don't think i
         
     }
-    public void sideways(double X, double Y){
-        DriveLB.set(ControlMode.PercentOutput, X, DemandType.ArbitraryFeedForward, 0);  // this was oringaly used for arcade drive
-        DriveLF.set(ControlMode.PercentOutput, Y, DemandType.ArbitraryFeedForward, 0);
-
+   
+    public void TurnAuto(double T, double U) {                    // Tankdrive Percent output
+        
+        
+        DriveLB.set(ControlMode.PercentOutput, T, DemandType.ArbitraryFeedForward, 0);  // this was oringaly used for arcade drive
+        DriveRF.set(ControlMode.PercentOutput, U, DemandType.ArbitraryFeedForward, 0);  // With the zero at the end I don't think it does anything different   
+        DriveLB.set(ControlMode.PercentOutput, T, DemandType.ArbitraryFeedForward, 0);  // this was oringaly used for arcade drive
+        DriveRB.set(ControlMode.PercentOutput, U, DemandType.ArbitraryFeedForward, 0);  // With the zero at the end I don't think i
+        
     }
 
     
