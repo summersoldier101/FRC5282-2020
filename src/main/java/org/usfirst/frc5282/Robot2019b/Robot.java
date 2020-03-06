@@ -33,7 +33,7 @@ public class Robot extends TimedRobot {
     public static Fire fire;
     public static Rotator rotator;
     public static IntakeSlider intakeSlider;
-    public static MyPneumatics myPneumatics;
+    
     
     Command autonomousCommand;
     SendableChooser<Command> chooser = new SendableChooser<>();
@@ -82,7 +82,7 @@ public class Robot extends TimedRobot {
         rotator = new Rotator();
         winch = new Winch();
         fire = new Fire();
-        myPneumatics = new MyPneumatics();
+        
         // Add commands to Autonomous Sendable Chooser
         
        // chooser.setDefaultOption("Autonomous Command", new AutonomousCommand());

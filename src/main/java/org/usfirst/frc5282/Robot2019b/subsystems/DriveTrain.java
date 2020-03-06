@@ -28,6 +28,7 @@ import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 
 //import com.kauailabs.navx.frc.AHRS; // NavX
 import edu.wpi.first.wpilibj.SPI; // NavX
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Timer;
 
 
@@ -49,6 +50,8 @@ LimeLight lime;
     private TalonSRX DriveRF;
     private TalonSRX DriveRB;
 
+    private Solenoid Air;
+
     NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
     NetworkTableEntry tx = table.getEntry("tx");
     NetworkTableEntry ty = table.getEntry("ty");
@@ -66,7 +69,8 @@ LimeLight lime;
     //Just Amining Assist
     private double AimThresholdPower=.2;       // Below this joystick input just aim. 2  If you are virtually stopped, just aim at the target.
     private double AimingPower=0.5;             // Just aim with this power   5           Power to just aim if you are virtually stoppped.
-    
+    boolean buttonX3 = false;
+    boolean buttonX4 = false;
     //Variables for inputs
     //private boolean buttonX7 = true ;              //Joystick left input
    // private boolean buttonX8 = true;  
@@ -168,7 +172,7 @@ LimeLight lime;
        DriveRB.configPeakOutputReverse(-1, kdTimeoutMs);
         
         //________ zeros encoder sensors when robot is turned on
-        
+        Air = new Solenoid(2);
         SensorZero();
         
     }
@@ -555,7 +559,25 @@ public void MotorPower(double L, double R) {                    // Tankdrive
         System.exit(1);
     }
 */
-
-
+public void AirExtend(){
+  //  buttonX3 = Robot.oi.xbox.getRawButton(3);
+    //if (buttonX3){
+      
+        if(buttonX3 = Robot.oi.xbox.getRawButton(3)){
+           Air.set(true); 
+        }
+        
+        if(buttonX4 = Robot.oi.xbox.getRawButton(4)){
+            Air.set(false); 
+        }
+       
+      
+   // }
+   
+    
+  //}
 }
+}
+
+
 

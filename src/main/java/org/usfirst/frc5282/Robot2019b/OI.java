@@ -99,9 +99,10 @@ public class OI {
 
        // buttonX1.whenPressed(new MT());  
         //buttonX2.whenPressed(new MT());  
-        //buttonX3.whenPressed(new MT());  
+        
         //buttonX4.whenPressed(new MT());  
-       buttonX6.whileHeld(new TargetAdjust());
+     buttonX6.whenPressed(new AirOn());
+       //buttonX6.whileHeld(new TargetAdjust());
       // buttonX7.whenPressed(new PipelineTo0());
       // buttonX8.whenPressed(new PipelineTo1());
       // buttonX5.whileHeld(new DrivePastLine());
