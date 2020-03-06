@@ -116,9 +116,10 @@ public class Robot extends TimedRobot {
         autonomousCommand = chooser.getSelected();
         //if (autonomousCommand != null) autonomousCommand.start();  // schedule the autonomous command (example)
         if (autonomousCommand != null) autonomousCommand.cancel();   // don't run the command called "AtonomousCommand"
-      // new AutoInFront().start();
+       new AutoInFront().start();
+       //new AutoCurved().start();
       // new AutonRight().start();
-       new AutoFeed().start();
+     //  new AutoFeed().start();
         
     }
 

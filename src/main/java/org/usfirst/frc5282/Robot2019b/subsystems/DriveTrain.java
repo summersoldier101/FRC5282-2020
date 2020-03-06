@@ -559,6 +559,7 @@ public void MotorPower(double L, double R) {                    // Tankdrive
         System.exit(1);
     }
 */
+/*
 public void AirExtend(){
   //  buttonX3 = Robot.oi.xbox.getRawButton(3);
     //if (buttonX3){
@@ -576,7 +577,7 @@ public void AirExtend(){
         Robot.driveTrain.MechPower(Jx, Jy, Jz);
         }
         
-        
+        */
        
       
    // }
@@ -584,7 +585,7 @@ public void AirExtend(){
     
   //}
 }
-}
+
 
 
 

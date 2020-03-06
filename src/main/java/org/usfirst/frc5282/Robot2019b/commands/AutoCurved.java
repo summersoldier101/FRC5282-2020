@@ -11,8 +11,12 @@ import org.usfirst.frc5282.Robot2019b.Robot;
 
 import edu.wpi.first.wpilibj.command.Command;
 
-public class AirOn extends Command {
-  public AirOn() {
+public class AutoCurved extends Command {
+
+  double myStartTime;
+double myTime;
+boolean myAutonFinished = false;
+  public AutoCurved() {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
     requires(Robot.driveTrain);
@@ -21,13 +25,36 @@ public class AirOn extends Command {
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    
+    myStartTime = System.currentTimeMillis();
+    System.out.println("myStartTime "+myStartTime);
+     myTime = 0.0;
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    //Robot.driveTrain.AirExtend();
+    
+  myTime = (System.currentTimeMillis()-myStartTime)/1000;
+  System.out.println("myTime "+myTime);
+  if ((myTime>=0.0)&&(myTime<2.0)) { System.out.println("Stage 3");
+   Robot.driveTrain.TargetAdjustAuto();
+}
+if ((myTime>=2.0)&&(myTime<6.0)) { System.out.println("Stage 4");
+    Robot.rotator.RotateAuto();
+}
+if ((myTime>=2.5)&&(myTime<6.0)) { System.out.println("Stage 5");
+    Robot.fire.BallfireAuto();
+}
+if ((myTime>=3.0)&&(myTime<6.0)) { System.out.println("Stage 6");
+  Robot.barrel.BarrelOnAuto();
+  if ((myTime>=6.0)&&(myTime<8.0)) { System.out.println("Stage 1");
+    Robot.driveTrain.ApplyMotorPower(-.35, -.35);
+}
+  if ((myTime>=8.0)&&(myTime<=10)) { System.out.println("Stage 2");
+  Robot.driveTrain.ApplyMotorPower(0, 0);
+  }
+  if ((myTime>=10)) { myAutonFinished = true;}
+}
   }
 
   // Make this return true when this Command no longer needs to run execute()

@@ -39,7 +39,7 @@ public class Winch extends Subsystem {
     }
     
     private void WinchPower(double e) {
-     Winch.set(ControlMode.PercentOutput, e, DemandType.ArbitraryFeedForward, 0);
+     //Winch.set(ControlMode.PercentOutput, e, DemandType.ArbitraryFeedForward, 0);
   }
 
   public void WinchDown() {

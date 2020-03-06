@@ -41,25 +41,29 @@ protected void initialize() {
    
   myTime = (System.currentTimeMillis()-myStartTime)/1000;
   System.out.println("myTime "+myTime);
-  if ((myTime>=0.0)&&(myTime<2.0)) { System.out.println("Stage 1");
-    Robot.driveTrain.ApplyMotorPower(-.26, -.25);
-}
-  if ((myTime>=2.0)&&(myTime<=4.0)) { System.out.println("Stage 2");
-  Robot.driveTrain.ApplyMotorPower(0, 0);
+  if((myTime>=0.0)&&(myTime<2.1)) {System.out.println("Stage 3");
+  Robot.driveTrain.ApplyMotorPower(-.35, -.35);
 }
  if ((myTime>=2.1)&&(myTime<4.0)) { System.out.println("Stage 3");
    Robot.driveTrain.TargetAdjustAuto();
-}
-if ((myTime>=4.0)&&(myTime<7.0)) { System.out.println("Stage 4");
-    Robot.rotator.RotateAuto();
-}
-if ((myTime>=7.0)&&(myTime<9.0)) { System.out.println("Stage 5");
-    Robot.fire.BallfireAuto();
-}
-if ((myTime>=7.0)&&(myTime<9.5)) { System.out.println("Stage 6");
-  Robot.barrel.BarrelOnAuto();
-}
+ }
+ if ((myTime>=4.0)&&(myTime<9.0)) { System.out.println("Stage 4");
+   Robot.rotator.RotateAuto();
+ }
+ if ((myTime>=6.0)&&(myTime<9.0)) { System.out.println("Stage 5");
+     Robot.fire.BallfireAuto();
+ }
+ if ((myTime>=6.5)&&(myTime<9.5)) { System.out.println("Stage 6");
+   Robot.barrel.BarrelOnAuto();
+ }
+  if ((myTime>=8.0)&&(myTime<=10)) { System.out.println("Stage 2");
+  Robot.driveTrain.ApplyMotorPower(0, 0);
+  }
   if ((myTime>=10)) { myAutonFinished = true;}
+}
+
+ 
+  
  
  
 
@@ -125,7 +129,7 @@ switch(state){
   }
 }
 */
- }
+ 
 
  // Make this return true when this Command no longer needs to run execute()
  @Override
