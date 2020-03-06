@@ -562,14 +562,21 @@ public void MotorPower(double L, double R) {                    // Tankdrive
 public void AirExtend(){
   //  buttonX3 = Robot.oi.xbox.getRawButton(3);
     //if (buttonX3){
-      
+        double Jy=-1*Robot.oi.xbox.getY(Hand.kLeft)*1;
+        double Jx=Robot.oi.xbox.getX(Hand.kLeft)*1;
+        double Jz=Robot.oi.xbox.getX(Hand.kRight)*1;
+    
         if(buttonX3 = Robot.oi.xbox.getRawButton(3)){
            Air.set(true); 
         }
-        
-        if(buttonX4 = Robot.oi.xbox.getRawButton(4)){
+        else{
+            if(buttonX4 = Robot.oi.xbox.getRawButton(4)){
             Air.set(false); 
         }
+        Robot.driveTrain.MechPower(Jx, Jy, Jz);
+        }
+        
+        
        
       
    // }

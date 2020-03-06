@@ -24,9 +24,11 @@ public class Winch extends Subsystem {
   // here. Call these from Commands.
   private TalonSRX Winch;
 
-  private boolean WhiteB1 = false;
-  private boolean WhiteB2= false;
-  private boolean WhiteB3= false;
+  // private boolean WhiteB1 = false;
+  // private boolean WhiteB2= false;
+  // private boolean WhiteB3= false;
+  private boolean buttonX1 = false;
+  private boolean buttonX2 = false;
 
   public void Winch(){
     Winch = new TalonSRX(8);
@@ -36,8 +38,8 @@ public class Winch extends Subsystem {
       WinchPower(.5);
     }
     
-    private void WinchPower(double w) {
-     //Winch.set(ControlMode.PercentOutput, w, DemandType.ArbitraryFeedForward, 0);
+    private void WinchPower(double e) {
+     Winch.set(ControlMode.PercentOutput, e, DemandType.ArbitraryFeedForward, 0);
   }
 
   public void WinchDown() {
@@ -49,19 +51,18 @@ public class Winch extends Subsystem {
     }
     
       public void WinchOn(){
-         WhiteB1 = Robot.oi.buttonboard.getRawButton(1);
-         WhiteB2 = Robot.oi.buttonboard.getRawButton(2);
-         WhiteB3 = Robot.oi.buttonboard.getRawButton(3);
+        buttonX1 = Robot.oi.xbox.getRawButton(1);
+        buttonX2 = Robot.oi.xbox.getRawButton(2);
         
-         if((WhiteB1&&WhiteB2)||(!WhiteB1&&!WhiteB2)){
+         if((buttonX1&&buttonX2)||(!buttonX1&&!buttonX2)){
           WinchStop();
          }
          else
          {
-          if(WhiteB1){
+          if(buttonX1){
             WinchUp();
           }
-          if(WhiteB2){
+          if(buttonX2){
             WinchDown();
           }
          }
