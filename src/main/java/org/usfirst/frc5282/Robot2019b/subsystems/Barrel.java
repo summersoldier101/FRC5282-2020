@@ -52,10 +52,10 @@ public void BarrelOn(){
   else 
   {
      if(buttonXP1){              // button 1
-      BarrelPower(.75);
+      BarrelPower(.6);
       }
       if(buttonXP2){            // button 2
-      BarrelPower(-.75);
+      BarrelPower(-.6);
   } 
  
  }

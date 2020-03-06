@@ -48,14 +48,15 @@ Rotator.set(R);
 }
 
 public void Rotate(){
-double Xleftjoystick = .3* Robot.oi.xbox2.getRawAxis(1);
-RotatorPower(Xleftjoystick);
+//double Xleftjoystick = .3* Robot.oi.xbox2.getRawAxis(1);
+double XRightjoystick = -.3* Robot.oi.xbox2.getRawAxis(5);
+RotatorPower(XRightjoystick);
 
 
 }
 
 public void RotateAuto(){
-RotatorPower(.1);
+RotatorPower(.25);
 
 
 }

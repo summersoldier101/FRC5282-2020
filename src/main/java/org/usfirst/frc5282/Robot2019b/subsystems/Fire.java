@@ -55,7 +55,13 @@ public class Fire extends Subsystem {
   }
 
   public void BallfireAuto(){
-    FirePower(.9);
+    FirePower(1);
 
   }
+
+  public void FireAuto(){
+    FirePower(1);
+    
+    
+    }
 }

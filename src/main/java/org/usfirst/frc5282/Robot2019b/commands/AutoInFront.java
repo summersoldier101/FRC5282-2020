@@ -41,10 +41,24 @@ protected void initialize() {
    
   myTime = (System.currentTimeMillis()-myStartTime)/1000;
   System.out.println("myTime "+myTime);
-  if ((myTime>=0.0)&&(myTime<2.0)) { System.out.println("Stage 1");}
-  if ((myTime>=2.0)&&(myTime<4.0)) { System.out.println("Stage 2");}
-  if ((myTime>=3.0)&&(myTime<6.0)) { System.out.println("Stage 3");}
- 
+  if ((myTime>=0.0)&&(myTime<2.0)) { System.out.println("Stage 1");
+    Robot.driveTrain.ApplyMotorPower(-.26, -.25);
+}
+  if ((myTime>=2.0)&&(myTime<=4.0)) { System.out.println("Stage 2");
+  Robot.driveTrain.ApplyMotorPower(0, 0);
+}
+ if ((myTime>=2.1)&&(myTime<4.0)) { System.out.println("Stage 3");
+   Robot.driveTrain.TargetAdjustAuto();
+}
+if ((myTime>=4.0)&&(myTime<7.0)) { System.out.println("Stage 4");
+    Robot.rotator.RotateAuto();
+}
+if ((myTime>=7.0)&&(myTime<9.0)) { System.out.println("Stage 5");
+    Robot.fire.BallfireAuto();
+}
+if ((myTime>=7.0)&&(myTime<9.5)) { System.out.println("Stage 6");
+  Robot.barrel.BarrelOnAuto();
+}
   if ((myTime>=10)) { myAutonFinished = true;}
  
  
@@ -58,13 +72,13 @@ protected void initialize() {
     //startTime=System.currentTimeMillis();
     //if (System.currentTimeMillis()>startTime+3){
     /*  System.out.println("State 1 timed out.");
-      Robot.driveTrain.ApplyMotorPower(-.26, -.25);
+     
       Timer.delay(2);
       Robot.driveTrain.ApplyMotorPower(0, 0);
       Timer.delay(.5);
       Robot.driveTrain.TargetAdjustAuto();
       Timer.delay(1);
-      Robot.rotator.RotateAuto();
+      
       Timer.delay(.5);
       Robot.rotator.RotateAuto();
       Robot.barrel.BarrelOnAuto();

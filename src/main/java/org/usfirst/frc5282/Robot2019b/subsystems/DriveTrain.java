@@ -205,7 +205,7 @@ LimeLight lime;
         
         
         double Jy=-1*Robot.oi.xbox.getY(Hand.kLeft)*1;
-        double Jx=Robot.oi.xbox.getX(Hand.kLeft)*1;
+        double Jx=-1*Robot.oi.xbox.getX(Hand.kLeft)*1;
         double Jz=Robot.oi.xbox.getX(Hand.kRight)*1;
 
        
@@ -215,15 +215,10 @@ LimeLight lime;
       
       
            
-           //Robot.intake.BallStop();
-            //System.out.println("pressed");
+           
             
           }
-         // if(buttonXP2){
-            //Robot.intake.Ballfire();
-            
-            //System.out.println("pressed");
-         // }
+        
         
                                 
     
@@ -294,14 +289,14 @@ public void TargetAdjust(){
     Jx = -Robot.oi.xbox2.getX();     // jright  
     */                 
     double Jy=-1*Robot.oi.xbox.getY(Hand.kLeft)*1;
-    double Jx=Robot.oi.xbox.getX(Hand.kLeft)*1;
+    double Jx=-1*Robot.oi.xbox.getX(Hand.kLeft)*1;
     double Jz=Robot.oi.xbox.getX(Hand.kRight)*1;
     
     //System.out.println("Target Aim Data:  x"+Tx+" y"+Ty+" l"+Tl+" a"+Tarea);
     //System.out.println(" Jy"+Jy+" Jx"+Jx+"jAverage"+jAverage);
 
-    buttonX1 = Robot.oi.xbox.getRawButton(1);     // Get joystick input
-    buttonX2 = Robot.oi.xbox.getRawButton(2);  
+    buttonX1 = Robot.oi.xbox.getRawButton(5);     // Get joystick input
+    //buttonX2 = Robot.oi.xbox.getRawButton(2);  
     System.out.println("targetting");
     
 
@@ -309,9 +304,7 @@ public void TargetAdjust(){
 
     if (Tl==1){                                  // Is there a target?        
         
-                                   // Driver Forwards and Aim
-            
-        if(buttonX1){
+                                   // Driver Forwards and Ai
             if(Tx > 10){
                 Jz = Jz+.3;
        }
@@ -338,30 +331,32 @@ public void TargetAdjust(){
                Jz=Jz - (-Tx-2)/(10-2)*.3;
            }
            else if (Tx< 0){
-               
+               //do nothing
            }
-       }
-       
-
-        }
+           /*
         if(buttonX2){
             if(Tl==1){
                 if(Ta < +3.450){
                     Jy = Jy+.5;
                 }
                 else if (Ta > +2.5){
-                    Jy= Jy + (-Ty-2)/(10-2)*.3;
+                    Jy= Jy + (-Ty-2)/(10-2)*.5;
                 }
                 else if (Ta > +8.134 ){
-                    Jy= Jy-2;
+                    Jy= Jy-.5;
                 }
                 if(Ta < +.115){
                     Jy= Jy-.5;
                 }
+                */
             }
+            Robot.driveTrain.MechPower(Jx, Jy, Jz);
         }
-        Robot.driveTrain.MechPower(Jx, Jy, Jz);
-        }
+    
+            
+        
+        
+        
                 /*
                 if(Tx > 20){
                     
@@ -399,9 +394,9 @@ public void TargetAdjust(){
 
 
 
+/*
 
-
-        /* move at target
+         move at target
         if(Tl==1){
             if(Ty > -25){
                 Jy=Jy +.5;
@@ -421,9 +416,9 @@ public void TargetAdjust(){
 
         }
 
+
+
 */
-
-
 
 
 
@@ -561,90 +556,6 @@ public void MotorPower(double L, double R) {                    // Tankdrive
     }
 */
 
-/*
-    public void TargetAdjust(){
-        
-    //private double m_PipeLine;
 
-     // ******************************************************
-    // This code is currently designed so that the user can overpower the assist.
-    // Pressing the button guides the user, but if they apply full power in one direction it will still go that way.
-    // This can help when aquiring the wrong target.
-    // The amount of over powering automated control is dictated by the AimingMultiplier 
-    // Note that the motors max out at 1.o so above the Multipler amount 
-    // (if multiplier of 0.3, then above 0.7 power on joystick) has reduced effect, since the motors can not be set to 1.3 and 0.7.  They get 1.0 and 0.7;
-    // aka. Slow down a little to
-
-        NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
-        NetworkTableEntry tx = table.getEntry("tx");
-        NetworkTableEntry ty = table.getEntry("ty");
-        NetworkTableEntry ta = table.getEntry("ta");
-        NetworkTableEntry tl = table.getEntry("tv");
-
-        double Tx = tx.getDouble(-1);
-        double Ty = ty.getDouble(-1);
-        double Tl = tl.getDouble(-1);
-        double Tarea = ta.getDouble(0.0);
-        System.out.println("Limelight Data Tx "+Tx+" Ty "+Ty);
-
-        jLeft = -Robot.oi.xbox.getY();     // Get joystick input
-        jRight = -Robot.oi.xbox2.getX();                        
-        jAverage = (jLeft+jRight)/2;      
-
-        System.out.println("Target Aim Data:  x"+Tx+" y"+Ty+" l"+Tl+" a"+Tarea);
-        System.out.println("                 jleft"+jLeft+" jRight"+jRight+"jAverage"+jAverage);
-       
-        
-        //Data ouput
-        //System.out.println("____________________________________________________________");
-        //System.out.println("TargetAimHeld command");
-        //System.out.println("Aim Data: cv"+cv+" cx"+cx+" cy"+cy+" ca"+ca+" cs"+cs);
-        //System.out.println("PipeLine: "+lime.getPipeline());
-        
-        //System.out.println("    Gyro:"+Robot.driveTrain.getGyroAngle());
-        
-              
-        
-        if (Tl==1){                                  // Is there a target?        
-            
-            if (jAverage>=AimThresholdPower){                               // Driver Forwards and Aim
-                if(Tx > AimingMinAngle){
-                    Robot.driveTrain.ApplyMotorPower(jLeft*(.5+AimingMultiplier), jRight*(1-AimingMultiplier));            // Adjust Right    used to be 1
-                }
-                else if (Tx < -AimingMinAngle){
-                    Robot.driveTrain.ApplyMotorPower(jLeft*(.5-AimingMultiplier), jRight*(1+AimingMultiplier));            // Adjust Left
-                }
-                else {
-                    Robot.driveTrain.ApplyMotorPower(jLeft, jRight);            // Below angle adjustment. Adjust none. 
-                }
-            }
-            else if (jAverage<=-AimThresholdPower){                         // Drive backwards and Aim
-                if(Tx > AimingMinAngle){
-                    Robot.driveTrain.ApplyMotorPower(jLeft*(.5-AimingMultiplier), jRight*(1+AimingMultiplier));            // Adjust Right
-                }
-                else if (Tx < AimingMinAngle){
-                    Robot.driveTrain.ApplyMotorPower(jLeft*(.5+AimingMultiplier), jRight*(1-AimingMultiplier));            // Adjust Left   
-                }
-                else {
-                    Robot.driveTrain.ApplyMotorPower(jLeft, jRight);            // Below minimum needed angle adjustment. Don't adjust
-                }
-            } else {                                                             // Just aim, NO driving
-                if(Tx > AimingMinAngle){
-                    Robot.driveTrain.ApplyMotorPower(AimingPower, -AimingPower);            // Adjust Right
-                }
-                else if (Tx < -AimingMinAngle){
-                    Robot.driveTrain.ApplyMotorPower(-AimingPower, AimingPower);            // Adjust Left
-                }
-                else {Robot.driveTrain.ApplyMotorPower(jLeft,jRight);}            // Not Driving, Just Aim
-            }
-        }
-        else{
-            Robot.driveTrain.ApplyMotorPower(jLeft, jRight);        // No target, just drive
-        }
-    
-    }
-*/
-
-   // }
 }
 

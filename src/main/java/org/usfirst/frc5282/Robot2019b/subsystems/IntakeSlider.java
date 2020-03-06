@@ -59,12 +59,18 @@ import edu.wpi.first.wpilibj.Spark;
   }
   
   public void SliderOn(){
-  double XRightjoystick = .5* Robot.oi.xbox2.getRawAxis(5);
-  SliderPower(XRightjoystick);
+  //double XRightjoystick = .25* Robot.oi.xbox2.getRawAxis(5);
+  double Xleftjoystick = .25* Robot.oi.xbox2.getRawAxis(1);
+  SliderPower(Xleftjoystick);
   
   }
 
-
+  public void SliderAuto(){
+    //double XRightjoystick = .25* Robot.oi.xbox2.getRawAxis(5);
+    
+    SliderPower(-.25);
+    
+    }
 
 
   

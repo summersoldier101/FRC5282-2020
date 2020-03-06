@@ -93,14 +93,14 @@ public void IntakePower(double I){
   
   public void BallIntake(){
    
-    double lTrigger = -.35 * Robot.oi.xbox2.getRawAxis(2);
+    double lTrigger = -.3 * Robot.oi.xbox2.getRawAxis(2);
     IntakePower(lTrigger); 
 
 
     }
 
     public void AutoFeedball(){
-      IntakePower(-.30);
+      IntakePower(.30);
 
     }
     

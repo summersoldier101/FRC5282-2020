@@ -29,10 +29,11 @@ public class Robot extends TimedRobot {
     public static LimeLight limeLight;
     public static Intake intake;
     public static Barrel barrel;
-    public static Wench wench;
+    public static Winch winch;
     public static Fire fire;
     public static Rotator rotator;
     public static IntakeSlider intakeSlider;
+    public static MyPneumatics myPneumatics;
     
     Command autonomousCommand;
     SendableChooser<Command> chooser = new SendableChooser<>();
@@ -79,8 +80,9 @@ public class Robot extends TimedRobot {
         barrel = new Barrel(); 
         intakeSlider = new IntakeSlider();
         rotator = new Rotator();
-        wench = new Wench();
+        winch = new Winch();
         fire = new Fire();
+        myPneumatics = new MyPneumatics();
         // Add commands to Autonomous Sendable Chooser
         
        // chooser.setDefaultOption("Autonomous Command", new AutonomousCommand());
@@ -114,8 +116,9 @@ public class Robot extends TimedRobot {
         autonomousCommand = chooser.getSelected();
         //if (autonomousCommand != null) autonomousCommand.start();  // schedule the autonomous command (example)
         if (autonomousCommand != null) autonomousCommand.cancel();   // don't run the command called "AtonomousCommand"
-       //new AutoInFront().start();
-       new AutoInFront().start();
+      // new AutoInFront().start();
+      // new AutonRight().start();
+       new AutoFeed().start();
         
     }
 
